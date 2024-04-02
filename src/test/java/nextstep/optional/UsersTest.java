@@ -10,6 +10,7 @@ public class UsersTest {
     public void getUser() {
         Users users = new Users();
         assertThat(users.getUser("crong")).isEqualTo(new User("crong", 35));
+        assertThat(users.getUser("jk")).isEqualTo(new User("jk", 40));
     }
 
 
@@ -17,5 +18,7 @@ public class UsersTest {
     public void getDefaultUser() {
         Users users = new Users();
         assertThat(users.getUser("codesquard")).isEqualTo(Users.DEFAULT_USER);
+        assertThat(users.getUser("")).isEqualTo(Users.DEFAULT_USER);
+        assertThat(users.getUser(null)).isEqualTo(Users.DEFAULT_USER);
     }
 }
