@@ -27,7 +27,15 @@ public class StreamStudy {
                 .get("src/main/resources/fp/war-and-peace.txt")), StandardCharsets.UTF_8);
         List<String> words = Arrays.asList(contents.split("[\\P{L}]+"));
 
-        // TODO 이 부분에 구현한다.
+	    List<String> longestWords = words.stream()
+			    .filter(word -> word.length() > 12)
+			    .distinct()
+			    .limit(100)
+			    .sorted((word1, word2) -> word2.length() - word1.length())
+			    .map(word -> word.toLowerCase())
+			    .collect(Collectors.toList());
+
+		longestWords.forEach(System.out::println);
     }
 
     public static List<Integer> doubleNumbers(List<Integer> numbers) {
