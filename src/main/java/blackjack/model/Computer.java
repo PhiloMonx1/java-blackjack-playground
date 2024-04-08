@@ -11,7 +11,7 @@ public class Computer extends Util {
 
 	public static int computeCardValue(List<Card> cards) {
 		int sum = sumCardValue(cards);
-		if (hasAce(cards) && sum <= 11) {
+		if (sum <= 11 && hasAce(cards)) {
 			return sum + 10;
 		}
 		return sum;
