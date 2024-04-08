@@ -296,3 +296,44 @@ YAGNI 원칙은 (You aren't gonna need it) 의 약어로 필요한 일만 하라
    - `value`를 가진다. 1~13 (1 = A, 11 = J, 12 = Q, 13 = K)
    - `getValue()` int 리턴 : 1~13을 그대로 리턴한다.
    - `getInfo()` String 리턴 : value+symbol 을 리턴한다. ex) 3다이아몬드, K스페이드
+2. `Computer` 객체 : 카드 계산을 위한 Util 클래스
+   - `sumCardValue(List<Card>)` : 카드 리스트의 value를 차례대로 합한 후 리턴한다. (스트림 예정)
+     - K,Q,J 는 10으로 계산한다 -> 11 이상은 10으로 계산.
+     - A는 1또는 11로 계산한다. -> 
+       - A를 계산하기 위해서 A는 마지막에 계산해야 한다. (앞에서 계산한 후 10을 빼는 방식 사용하지 않을 예정)
+       - 큰 숫자를 기준으로 더한 값에 A가 포함되어 있고, 11이하라면 -> 10을 더해서 리턴
+   - `미정(int sumValue)` : 카드 합을 기준으로 boolean 값을 리턴한다. (람다 예정)
+     - `isBust()` : 21을 초과한 경우 ture
+     - `isBlackJack()` : 21일 경우 ture
+     - `isStay()` : 17이상일 경우 true
+    ```java
+    public class Computer extends Util {
+        public static boolean isBust(int sumValue) {
+            return sumValue > 21;
+        }
+    
+        public static boolean isBlackJack(int sumValue) {
+            return sumValue == 21;
+        }
+    
+        public static boolean isStay(int sumValue) {
+            return sumValue >= 17;
+        }
+    
+        public static boolean testCondition(int sumValue, Predicate<Integer> predicate) {
+            return predicate.test(sumValue);
+        }
+    }
+    
+    ```
+   > `isBust()`, `isBlackJack()`, `isStay()` 메서드는 `testCondition()` 메서드를 통해 람다식으로 변환할 수 있다. <br>
+   > 그런데 이렇게 변환하는 것이 더 나은 코딩인지 솔직히 잘 모르겠다. `testCondition()` 만 가지고 세 가지 메서드를 한다고 했을 때 <br>
+   > 아무런 주석도 없이 해당 코드를 이해시키는 것이 가능할지 잘 모르겠다. <br> 
+   > 의도를 이해시키기 위해서는 사용부에서 좀 더 명확하게 표현해야 한다.
+    ```java
+   boolean isBust = Computer.testCondition(22, sumValue -> sumValue > 21);
+   boolean isBlackJack = Computer.testCondition(21, sumValue -> sumValue == 21);
+   boolean isStay = Computer.testCondition(17, sumValue -> sumValue >= 17);
+    ```
+   > 이렇게 각 조건을 명시해서 사용하는 것이 좋아보인다.
+   -  TODO: 승리자 리턴 메서드는 Player 생성 후 작성. 
