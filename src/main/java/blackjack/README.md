@@ -288,3 +288,11 @@ YAGNI 원칙은 (You aren't gonna need it) 의 약어로 필요한 일만 하라
     - "딜러는 16이하라 한장의 카드를 더 받았습니다."
     - "- 결과: "{int}
     - 최종 수익
+
+### TodoList
+
+1. `Card` 객체
+   - `symbol`을 가진다. Enum 하트, 다이아몬드, 스페이드, 클로버
+   - `value`를 가진다. 1~13 (1 = A, 11 = J, 12 = Q, 13 = K)
+   - `getValue()` int 리턴 : 1~13을 그대로 리턴한다.
+   - `getInfo()` String 리턴 : value+symbol 을 리턴한다. ex) 3다이아몬드, K스페이드
