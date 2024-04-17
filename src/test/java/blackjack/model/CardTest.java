@@ -29,4 +29,12 @@ class CardTest {
 					new Card(CardSymbol.SPADE, 14);
 				});
 	}
+
+	@Test
+	@DisplayName("new 카드 객체 동일성 체크")
+	void sameCard() {
+		Card towHeart = new Card(CardSymbol.HEART, 2);
+		Card sameCard = new Card(CardSymbol.HEART, 2);
+		assertThat(towHeart).isEqualTo(sameCard);
+	}
 }

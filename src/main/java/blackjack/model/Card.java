@@ -1,5 +1,7 @@
 package blackjack.model;
 
+import java.util.Objects;
+
 public class Card {
 
 	public static final String[] CARDS_VALUE = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
@@ -17,5 +19,22 @@ public class Card {
 
 	public String getInfo() {
 		return CARDS_VALUE[getValue() - 1] + symbol.getSymbolName();
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		Card card = (Card) o;
+		return symbol == card.symbol && Objects.equals(value, card.value);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(symbol, value);
 	}
 }
