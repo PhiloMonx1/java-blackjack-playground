@@ -1,6 +1,7 @@
 package blackjack.model;
 
 import java.util.Objects;
+import java.util.Random;
 
 public class Card {
 
@@ -11,6 +12,11 @@ public class Card {
 	public Card(CardSymbol symbol, int value) {
 		this.symbol = symbol;
 		this.value = new CardValue(value);
+	}
+
+	public Card() {
+		this.symbol = CardSymbol.getRandomSymbol();
+		this.value = new CardValue(new Random().nextInt(13) + 1);
 	}
 
 	public int getValue() {
