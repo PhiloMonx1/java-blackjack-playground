@@ -14,5 +14,8 @@ class PlayerTest {
 
 		assertThat(pobi.getName()).isEqualTo("pobi");
 		assertThat(pobi.getMoney()).isEqualTo(10000);
+
+		Player sameName = new Player("pobi", 20000);
+		assertThat(pobi).isEqualTo(sameName);
 	}
 }
