@@ -386,3 +386,33 @@ YAGNI 원칙은 (You aren't gonna need it) 의 약어로 필요한 일만 하라
         `Player`가 받은 `Card`는 한 게임 내에서만 `Player`의 것으로 인식된다. 이는 내가 `money`를 대하던 관점과 동일하다. <br>
        
 결론 : Cards 객체는 Map<Card, Player> 형식으로 작성하고, 일급 컬렉션과 Map에 대한 추가 학습과 함께 구현하는 것을 목표로 한다.
+
+5. CardDeck
+> `Map<K, V>` 의 값은 중복될 수 있지만 키는 고유해야 한다. 그렇기에 `Cards` 에서 각 `Card`는 고유하게 설정하는 것이 가능 할 것이라 판단했다. <br>
+> 그러나 내가 관과한 점이 있었는데, `Set`과 달리 `Map`은 이미 존재하는 키가 다시 들어왔을 때 무시하는 것이 아닌 기존 값을 덮어씌운다는 것이다. <br>
+```java
+public class Cards {
+	private final Map<Card, Player> cards;
+	
+	public Cards drawCard(Player player) {
+		Map<Card, Player> copiedCards = new HashMap<>(this.cards);
+		copiedCards.put(new Card(), player);
+		return new Cards(copiedCards);
+	}
+}
+```
+> 그렇기에 해당 코드는 이미 `Map`에 존재하는 `Card`가 생성될 때 기존 Player가 바뀌게 될 수도 있는 위험성을 가지고 있다. <br>
+> 이를 해결하는 방법은 `Map`이 제공하는 `containsKey()` 메서드를 활용해서 Key가 이미 존재하는지 검증하는 것이다. <br>
+> `Card`가 이미 Key로 존재할 경우 중복되지 않을 때까지 새로운 `Card`를 생성해서 것이다. <br>
+> 그러나 `Card`의 조합은 총 52(4 * 13)개로 제한되어 있다. 만약 52개가 모두 이미 `Map`에 존재할 경우 대응할 수 없다. <br>
+> 이 경우 애초에 `CardDeck`이 필요하다. `CardDeck`에 미리 52개의 `Card` 조합 혹은 객체를 넣어놓고 여기서 꺼내 쓰는 것이다. <br>
+> 해당 방법의 장점은 보다 현실적이라는 것이다. 정해진 트럼프 카드덱을 사용하는 실제 게임하고 유사성이 높다. <br>
+> 또한 트럼프 카드를 사용하는 다른 게임에도 사용할 수 있다는 점에서 확장성도 높다는 생각이 들었다. <br>
+> 52장의 카드를 게임 시작시 셔플하고, 카드를 드로우 할 때 여기서는 삭제해야 한다. 이를 어떻게 구현해야 할까? <br>
+> 원하는 동작이 있기 때문에 테스트 작성을 우선으로 하는 것이 가능해보였다. 내가 원하는 동작은 다음과 같다. 
+> 1. 생성 될 때 Size가 52 일 것.
+> 2. 순서가 랜덤하게 셔플되어 있을 것 (어떻게 테스트 해야 할까? 두 개의 인스턴스를 만든 후 순서가 다른지 검증하는 방법은? 랜덤인데 보장이 가능한가?)
+> 3. 카드를 드로우 했을 때 해당 카드가 삭제되는 것. (contains()가 false가 되도록)
+>
+> 이렇게 3가지 동작을 하길 원했다. 그렇다면 드로우는 `Cards` 가 아닌 `CardDeck`이 가지고 있어야 하는걸까?
+> 기존 `Cards::drawCard()`의 네이밍을 바꿔야 할지도 모르겠다.

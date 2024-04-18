@@ -16,7 +16,7 @@ public class Card {
 
 	public Card() {
 		this.symbol = CardSymbol.getRandomSymbol();
-		this.value = new CardValue(new Random().nextInt(13) + 1);
+		this.value = new CardValue(new Random().nextInt(CardValue.MAX) + CardValue.MIN);
 	}
 
 	public int getValue() {
