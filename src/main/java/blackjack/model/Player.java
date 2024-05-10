@@ -4,15 +4,21 @@ public abstract class Player {
 
 	public static final int MAX_SCORE = 21;
 	private final PlayerName name;
+	private final PlayerMoney money;
 	private Hand hand;
 
-	protected Player(PlayerName name) {
+	protected Player(PlayerName name, PlayerMoney money) {
 		this.name = name;
+		this.money = money;
 		this.hand = new Hand();
 	}
 
 	public String getName() {
 		return name.getName();
+	}
+
+	public int getMoney() {
+		return money.getMoney();
 	}
 
 	public String getHandInfo() {
@@ -30,5 +36,6 @@ public abstract class Player {
 	protected void addCard(Card card) {
 		hand.addCard(card);
 	}
+
 	public abstract void receiveCard(Card card);
 }
