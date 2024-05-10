@@ -13,4 +13,8 @@ public class Card {
 	public String getCardInfo() {
 		return denomination.getValue() + pattern.getSymbolName();
 	}
+
+	public Denomination getDenomination() {
+		return denomination;
+	}
 }
