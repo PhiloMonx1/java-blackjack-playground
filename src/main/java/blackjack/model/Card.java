@@ -2,8 +2,8 @@ package blackjack.model;
 
 public class Card {
 
-	private Pattern pattern;
-	private Denomination denomination;
+	private final Pattern pattern;
+	private final Denomination denomination;
 
 	public Card(Pattern pattern, Denomination denomination) {
 		this.pattern = pattern;
