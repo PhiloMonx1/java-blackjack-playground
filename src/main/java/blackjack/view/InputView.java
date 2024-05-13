@@ -62,6 +62,10 @@ public class InputView extends Util {
 	}
 
 	public static boolean askReceiveCard(Player player) {
+		if (player.isFull()) {
+			return false;
+		}
+
 		if (player instanceof Dealer) {
 			return true;
 		}

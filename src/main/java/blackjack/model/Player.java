@@ -29,8 +29,8 @@ public abstract class Player {
 		return hand.getScore();
 	}
 
-	public boolean isBust() {
-		return getHandScore() > MAX_SCORE;
+	public boolean isFull() {
+		return getHandScore() >= MAX_SCORE;
 	}
 
 	protected void addCard(Card card) {
