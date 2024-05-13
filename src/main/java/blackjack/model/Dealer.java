@@ -10,7 +10,7 @@ public class Dealer extends Player {
 	}
 	@Override
 	public void receiveCard(Card card) {
-		if (!isDrawMaxScore()) {
+		if (getHandScore() < DRAW_MAX_SCORE) {
 			addCard(card);
 		}
 	}
