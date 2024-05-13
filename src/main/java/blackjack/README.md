@@ -116,3 +116,89 @@ chore (maintain)
 이번 설계는 [향로님의 깃헙](https://github.com/jojoldu/oop-java) 회고를 보며 직접 따라해보고 GPT 등을 사용해 설계를 했다. 이전 설계가 여전히 오버엔지니어링 된 설계였다는 것을 깨달았다.
 
 가장 중요한 객체는 `Hand`이다. 점수 계산에 대한 책임을 맡기는 것으로 `Card`와 `Deck`는 트럼프 카드의 표본 역할을 유지할 수 있게된다. 또한 `Player` 객체 또한 `Hand`를 관리하는 것으로 역할이 보다 명확해진다. 만약 블랙잭이 아닌 다른 카드게임이 추가된다면 `Hand` 객체를 추상화 해서 카드 게임 규칙에 맞게 인터페이스를 정의해서 사용할 수 있을 것이다.
+
+### 올바른 예외처리
+![exception-gamer-name.png](images/exception-gamer-name.png)
+해당 이미지는 Gamer의 이름을 '딜러'로 설정했을 때 발생하는 예외이다. 이것 말고 배팅 금액을 10000원 미만으로 설정했을 때도 `IllegalArgumentException`에러가 발생한다.
+
+```java
+public class Gamer extends Player {
+
+	private static final String ERROR_MESSAGE_PLAYER_NAME_DEALER = "딜러를 이름으로 설정할 수 없습니다.";
+	private static final int MIN_MONEY = 10000;
+	private static final String ERROR_MESSAGE_MONEY_NEGATIVE =
+			"배팅 금액은" + MIN_MONEY + "원 이상부터 가능합니다.";
+
+	public Gamer(String name, int money) {
+		super(new PlayerName(validateName(name)), new PlayerMoney(validateMoney(money)));
+	}
+
+	private static String validateName(String name) {
+		if (name.equals(Dealer.DEALER_NAME)) {
+			throw new IllegalArgumentException(ERROR_MESSAGE_PLAYER_NAME_DEALER);
+		}
+		return name;
+	}
+
+	private static int validateMoney(int money) {
+		if (money < MIN_MONEY) {
+			throw new IllegalArgumentException(ERROR_MESSAGE_MONEY_NEGATIVE);
+		}
+		return money;
+	}
+	//...(생략)
+}
+```
+
+예외 처리는 `Gamer`에서 하고 있다. 해당 예외처리를 추상 클래스인 `Player`에서 하지 않는 이유는
+```java
+public class Dealer extends Player {
+
+	public static final int DRAW_MAX_SCORE = 17;
+	public static final String DEALER_NAME = "딜러";
+
+	public Dealer() {
+		super(new PlayerName(DEALER_NAME), new PlayerMoney(0));
+	}
+	//...(생략)
+}
+```
+`Dealer`가 생성될 때 예외가 발생하지 않게 하기 위함이었다.
+
+이제 다시 첨부한 이미지를 보면, 사용자는 프로그램을 사용하다가 예외를 맞이해야 한다.
+![exception-typo.png](images/exception-typo.png)
+심지어 만약 사용자가 배팅 금액을 입력할 때 오타가 발생하면 예외와 함께 프로그램이 종료되는 경험을 가질 수 밖에 없는 구조이다.
+
+![recursion-in-error-handling.png](images/recursion-in-error-handling.png)
+```java
+public class InputView extends Util {
+
+	private static final String ERROR_MESSAGE_WRONG_INPUT = "'y' 혹은 'n' 만 입력 가능합니다.";
+	private static final Scanner scanner = new Scanner(System.in);
+
+	//...(생략)
+
+	public static int askBettingMoney(String playerName) {
+		System.out.println(playerName + "의 배팅 금액은?");
+		return scanner.nextInt();
+	}
+
+	public static boolean askReceiveCard(Player player) {
+		if (player instanceof Dealer) {
+			return true;
+		}
+
+		System.out.println(player.getName() + "는 한장의 카드를 더 받겠습니까?(예는 y, 아니오는 n)");
+		String input = scanner.next();
+		if (!input.equals("y") && !input.equals("n")) {
+			System.out.println(ERROR_MESSAGE_WRONG_INPUT);
+			askReceiveCard(player);
+		}
+		return input.equals("y");
+	}
+}
+
+```
+반면 `askReceiveCard()` 에서는 재귀 호출을 통해 사용자에게 예외 메시지를 알리고, 다시 입력할 수 있도록 하고 있다.
+
+해당 방식으로 예외가 발생해도 사용자에게 피드백과 함께 재입력 기회를 줘 프로그램의 중단 없이 예외처리를 할 수 있다.
