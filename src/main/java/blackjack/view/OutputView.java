@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 public class OutputView extends Util {
+
 	private static final String SEPARATOR = "\n";
 	private static final String MESSAGE_DISTRIBUTE_CARD = "에게 2장의 카드를 나누어 주었습니다.\"";
 	private static final String MESSAGE_DEALER_DRAW = "딜러는 16이하라 한장의 카드를 더 받았습니다.";
@@ -14,7 +15,6 @@ public class OutputView extends Util {
 	private static final String RESULT = " - 결과: ";
 	private static final String REST = ", ";
 	private static final String COLON = ": ";
-
 
 
 	private OutputView() {
@@ -31,14 +31,13 @@ public class OutputView extends Util {
 	}
 
 	private static String getPlayerHand(Player player) {
-		return player.getName() + CARD + player.getHandInfo() + RESULT
-				+ player.getHandScore();
+		return player.getName() + CARD + player.getHandInfo() + RESULT + player.getHandScore();
 	}
 
 	public static void printDistributeCards(List<Player> players) {
 		StringBuilder stringBuilder = new StringBuilder();
 		for (Player player : players) {
-			stringBuilder.append(player.getName() + REST);
+			stringBuilder.append(player.getName()).append(REST);
 		}
 		System.out.println(stringBuilder.append(MESSAGE_DISTRIBUTE_CARD));
 	}
@@ -62,7 +61,7 @@ public class OutputView extends Util {
 		return player.getName() + COLON + profit + SEPARATOR;
 	}
 
-	public static void dealerDrawCardMassage() {
+	public static void dealerDrawCardMessage() {
 		System.out.println(MESSAGE_DEALER_DRAW);
 	}
 }
