@@ -6,6 +6,11 @@ public class Gamer extends Player {
 	}
 
 	@Override
+	public String getHandInfo(boolean isGameEnded) {
+		return super.getHandInfo();
+	}
+
+	@Override
 	public void receiveCard(Card card) {
 		addCard(card);
 	}

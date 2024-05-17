@@ -25,8 +25,8 @@ public abstract class Player {
 		return hand.getCardsInfo(false);
 	}
 
-	protected String getHandInfo(boolean firstCardHidden) {
-		return hand.getCardsInfo(firstCardHidden);
+	public String getHandInfo(boolean isGameEnded) {
+		return hand.getCardsInfo(!isGameEnded);
 	}
 
 

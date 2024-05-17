@@ -41,7 +41,7 @@ public class OutputView extends Util {
 
 	private static String getPlayerHand(Player player, boolean isGameEnded) {
 		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append(player.getName()).append(CARD).append(player.getHandInfo());
+		stringBuilder.append(player.getName()).append(CARD).append(player.getHandInfo(isGameEnded));
 		if (isGameEnded) {
 			stringBuilder.append(RESULT).append(player.getHandScore());
 		}
