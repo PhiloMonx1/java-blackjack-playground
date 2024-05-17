@@ -4,16 +4,9 @@ public class Dealer extends Player {
 
 	public static final int DRAW_MAX_SCORE = 17;
 	public static final String DEALER_NAME = "딜러";
-	private boolean gameEnded;
 
 	public Dealer() {
 		super(new PlayerName(DEALER_NAME), new PlayerMoney(0));
-		this.gameEnded = false;
-	}
-
-	@Override
-	public String getHandInfo() {
-		return super.getHandInfo(!gameEnded);
 	}
 
 	@Override
@@ -32,7 +25,7 @@ public class Dealer extends Player {
 		return getHandScore() >= DRAW_MAX_SCORE;
 	}
 
-	public void gameEnd() {
-		this.gameEnded = true;
+	public boolean isBust() {
+		return getHandScore() > 21;
 	}
 }
