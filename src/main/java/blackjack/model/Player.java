@@ -22,8 +22,13 @@ public abstract class Player {
 	}
 
 	public String getHandInfo() {
-		return hand.getCardsInfo();
+		return hand.getCardsInfo(false);
 	}
+
+	protected String getHandInfo(boolean firstCardHidden) {
+		return hand.getCardsInfo(firstCardHidden);
+	}
+
 
 	public int getHandScore() {
 		return hand.getScore();

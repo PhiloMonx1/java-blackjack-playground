@@ -17,20 +17,31 @@ public class Hand {
 		cards.add(card);
 	}
 
-	public String getCardsInfo() {
-		return cards.stream()
+	public String getCardsInfo(boolean firstCardHidden) {
+		String cardInfo = cards.stream()
 				.map(Card::getCardInfo)
 				.collect(Collectors.joining(", "));
+
+		if (firstCardHidden) {
+			return hideFirstCard(cardInfo);
+		}
+		return cardInfo;
+	}
+
+	private String hideFirstCard(String cardInfo) {
+		int commaIndex = cardInfo.indexOf(",");
+		if (commaIndex != -1) {
+			return "[비공개]" + cardInfo.substring(commaIndex);
+		}
+		return "[비공개]";
 	}
 
 	public int getScore() {
 		int score = 0;
-
 		for (Card card : cards) {
 			Denomination denomination = card.getDenomination();
 			score += denomination.getScore();
 		}
-
 		return adjustScoreForAces(score);
 	}
 
