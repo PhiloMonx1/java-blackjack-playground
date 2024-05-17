@@ -24,14 +24,28 @@ public class OutputView extends Util {
 	public static void printPlayersHand(List<Player> players) {
 		StringBuilder stringBuilder = new StringBuilder();
 		for (Player player : players) {
-			stringBuilder.append(getPlayerHand(player));
+			stringBuilder.append(getPlayerHand(player, false));
 			stringBuilder.append(SEPARATOR);
 		}
 		System.out.println(stringBuilder);
 	}
 
-	private static String getPlayerHand(Player player) {
-		return player.getName() + CARD + player.getHandInfo() + RESULT + player.getHandScore();
+	public static void printPlayersHand(List<Player> players, boolean isGameEnded) {
+		StringBuilder stringBuilder = new StringBuilder();
+		for (Player player : players) {
+			stringBuilder.append(getPlayerHand(player, isGameEnded));
+			stringBuilder.append(SEPARATOR);
+		}
+		System.out.println(stringBuilder);
+	}
+
+	private static String getPlayerHand(Player player, boolean isGameEnded) {
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append(player.getName()).append(CARD).append(player.getHandInfo());
+		if (isGameEnded) {
+			stringBuilder.append(RESULT).append(player.getHandScore());
+		}
+		return stringBuilder.toString();
 	}
 
 	public static void printDistributeCards(List<Player> players) {
